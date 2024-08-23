@@ -1,10 +1,10 @@
-#############################################
-#                                           #
-#            Knapsack - Password Manager    #
-#            created by Kevin Hansen        #
-#            GNU Public Licence v.3         #
-#                                           #
-#############################################
+######################################
+#                                    #
+#     Knapsack - Password Manager    #
+#       created by Kevin Hansen      #
+#        GNU Public Licence v.3      #
+#                                    #
+######################################
 import tkinter as tk
 from tkinter import Menu
 from tkinter import ttk
