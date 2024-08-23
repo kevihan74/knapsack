@@ -34,15 +34,18 @@ try:
 except:
     pass
     
+# method to clear all widgets from self.results_frame
 def clearFrame(frame):
     for widget in frame.winfo_children():
         widget.destroy()
         
+# method to write new values to the table
 def writeTable(pwd, unamer, siter):
     line = "INSERT INTO password VALUES('" + pwd.replace("&amp;", "&") + "', '" + unamer + "', '" + siter + "')"
     cur.execute(line)
     con.commit()
     
+# method to extract all data from the table
 def readTable(self):
     try:
         self.password.clear()
@@ -56,22 +59,6 @@ def readTable(self):
         self.password.append(row[0])
         self.username.append(row[1])
         self.sitename.append(row[2])
-        
-def tableBackup(self):
-    try:
-        self.password.clear()
-        self.username.clear()
-        self.sitename.clear()
-    except:
-        pass
-    
-    line = "SELECT pw, username, site FROM password"
-  
-    for row in cur.execute(line):
-        self.password.append(row[0])
-        self.username.append(row[1])
-        self.sitename.append(row[2])
-    
         
 def deleteRow(self, pw, site):
     line = "DELETE FROM password WHERE pw='" + pw + "' AND site='" + site + "'"
@@ -127,11 +114,10 @@ class Passwords(tk.Tk):
         cbut = tk.Button(mroot, text=" Close ", bg="white", font="Times 14", command=closeme)
         cbut.pack(side="top", pady=10)
         
-        
+    # method to export all data to an xml file
     def export_to_file(self):
-        #xmlfile1 = self.application_path.replace("\\", "/") + "/backup.xml"
         p = asksaveasfile(title = "Save your backup", initialfile = "backup.xml", initialdir = self.application_path, defaultextension = ".xml") 
-        tableBackup(self)
+        readTable(self)
         if p:
             p.write("<backup>\n")
             i = 0
@@ -145,7 +131,7 @@ class Passwords(tk.Tk):
             p.write("</backup>")
             p.close()
         
-            
+    # import table data from xml file       
     def import_from_file(self):
         # Delete current table data before importing new data
         li = "DELETE FROM password"
@@ -169,14 +155,14 @@ class Passwords(tk.Tk):
         while i < len(x):
             writeTable(x[i].text, y[i].text, z[i].text)
             i += 1
-        
+            
+    # method to return the label text to a normal color/state  
     def focOut(self, col, lab):
-        # return the label text to a normal color/state
         lab['background'] = col
         lab.config(state='normal')
         
+    # method to send focus away from highlighted text to trigger focOut
     def frameFocus(self, fr):
-        # send focus away from highlighted text to trigger focOut
         fr.focus_set()
         
     def show_pws(self):
