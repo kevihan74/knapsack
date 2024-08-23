@@ -3,7 +3,7 @@ A password manager that is used to create, store and organize uniquely random pa
 This program was written in python 3 and uses Tkinter as the GUI. SQLite is the database used to store the passwords, usernames, and site names.
 
 # Reqiured for running
-In order to run this software, you will need python 3 and Tkinter installed. You will also need to install PIL after python and tkinter are set up. Simply write "pip3 install pillow" in terminal(Linux, MacOS) or command prompt(Windows)<br><br>
+In order to run this software, you will need python 3 and Tkinter installed. You will also need to install PIL after python and tkinter are set up. Simply write "pip3 install pillow" in terminal(Linux, MacOS) or command prompt(Windows).<br><br>
 
 For Windows:<br>
 Download from https://www.python.org/downloads/windows/ and download the latest version. Tkinter is included.<br><br>
