@@ -39,7 +39,7 @@ def clearFrame(frame):
         widget.destroy()
         
 def writeTable(pwd, unamer, siter):
-    line = "INSERT INTO password VALUES('" + pwd + "', '" + unamer + "', '" + siter + "')"
+    line = "INSERT INTO password VALUES('" + pwd.replace("&amp;", "&") + "', '" + unamer + "', '" + siter + "')"
     cur.execute(line)
     con.commit()
     
@@ -137,7 +137,7 @@ class Passwords(tk.Tk):
             i = 0
             while i < len(self.password):
                 p.write("    <info>\n")
-                p.write("        <password>" + self.password[i] + "</password>\n")
+                p.write("        <password>" + self.password[i].replace("&", "&amp;") + "</password>\n")
                 p.write("        <username>" + self.username[i] + "</username>\n")
                 p.write("        <sitename>" + self.sitename[i] + "</sitename>\n")
                 p.write("    </info>\n")
