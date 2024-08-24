@@ -388,7 +388,7 @@ class Passwords(tk.Tk):
         yy = int(hh/2) - 270
         self.geometry('%dx%d+%d+%d' % (ww, hh, xx, yy))
         self.configure(bg=windowColor)
-        self.iconbitmap(application_path + "/logo-removebg.ico")
+        self.iconbitmap(application_path + "/logo.ico")
         
         # Menu bar
         menubar = Menu(self)
