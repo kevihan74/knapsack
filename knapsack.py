@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup as bs
 from tkinter.filedialog import asksaveasfile 
 from tkinter.filedialog import askopenfilename
 from PIL import ImageTk, Image
-
+from tooltip import Hovertip
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -86,6 +86,22 @@ class Passwords(tk.Tk):
         con.commit()
         self.pwlabs[i]['text'] = self.entr.get()
     
+    def check_changed(self):
+        p = open(self.application_path + "/check.txt", "w")
+        if self.check.get() == 1:
+            for s in self.pwlabs:
+                myTip = Hovertip(s,'  Left click this password to one-step select and copy it  ')
+            for u in self.userlabs:
+                myTip = Hovertip(u,' Left click this username to one-step select and copy it ')
+            p.write("true")
+        else:
+            for s in self.pwlabs:
+                myTip = Hovertip(s, "")
+            for u in self.userlabs:
+                myTip = Hovertip(u, "")
+            p.write("false")
+        p.close()
+            
     def about(self):
         def closeme():
             mroot.destroy()
@@ -199,6 +215,7 @@ class Passwords(tk.Tk):
         frame=tk.Frame(canvas, width=y, background="black")
         self.update_buts = []
         self.pwlabs = []
+        self.userlabs = []
         i = 0
         while i < len(self.password):
             if i % 2 == 0:
@@ -216,13 +233,18 @@ class Passwords(tk.Tk):
             pwlab.bind('<Button-1>', lambda e, lab=pwlab: self.focusText(lab))
             pwlab.bind('<FocusOut>', lambda e, col=mycolor, lab=pwlab: self.focOut(col, lab))
             pwlab.pack(side="left", padx=10, pady=10, fill="x")
+            if self.check.get() == 1:
+                myTip = Hovertip(pwlab,'  Left click this password to one-step select and copy it  ')
             self.pwlabs.append(pwlab)
             
             # username label
             uslab = tk.Label(newframe, text=self.username[i], bg=mycolor, width=15, fg="white", font="Times 16")
             uslab.bind('<Button-1>', lambda e, lab=uslab: self.focusText(lab))
             uslab.bind('<FocusOut>', lambda e, col=mycolor, lab=uslab: self.focOut(col, lab))
+            if self.check.get() == 1:
+                myTip = Hovertip(uslab,' Left click this username to one-step select and copy it ')
             uslab.pack(side="left", padx=10, pady=10, fill="x")
+            self.userlabs.append(uslab)
             
             # sitename label
             stelab = tk.Label(newframe, text=self.sitename[i], bg=mycolor, width=15, fg="white", font="Times 16")
@@ -422,6 +444,17 @@ class Passwords(tk.Tk):
         self.site = tk.StringVar()
         self.site.set("")
         
+        # open file to assign proper value to self.check
+        p = open(self.application_path + "/check.txt")
+        x = p.readline().replace("\n", "")
+        p.close()
+        
+        self.check = tk.IntVar()
+        if x == "true":
+            self.check.set(1)
+        else:
+            self.check.set(0)
+        
         # frames for storing widgets 
         self.topFrame = tk.Frame(self, bg=windowColor, width=ww, height=10)
         self.topFrame.pack(side="top", fill='x', anchor='n', pady=5, padx=5)
@@ -508,6 +541,17 @@ class Passwords(tk.Tk):
         # button to retrieve all of the passwords
         retrieve_button = tk.Button(user_site, text=" Refresh Passwords ", bg="#181818", fg="white", font=("Times 12"), command=self.retrieve) 
         retrieve_button.pack(side="left")
+        
+        # tool tips
+        s = ttk.Style()
+        s.configure("TCheckbutton", background=windowColor, foreground="white")
+        self.tooltip_check = ttk.Checkbutton(user_site, text="Tooltips ", command=self.check_changed, variable=self.check, onvalue=1, offvalue=0)
+        self.tooltip_check.pack(side="left", padx=10)
+        if self.check.get() == 1:
+            msg = "  Uncheck to hide tooltips on passwords and usernames  "
+        else:
+            msg = "  Check to show tootips on passwords and usernames  "
+        myTip = Hovertip(self.tooltip_check, msg)
         
         self.retrieve()
         
